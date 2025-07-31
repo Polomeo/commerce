@@ -6,7 +6,7 @@ from django.db import models
 class User(AbstractUser):
     watchlist = models.ManyToManyField('Listing',
                                        blank=True,
-                                       related_name="watching")
+                                       related_name="watchers")
     
 class Category(models.Model):
     title = models.CharField(max_length=64)
