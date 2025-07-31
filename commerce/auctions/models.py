@@ -8,8 +8,14 @@ class User(AbstractUser):
                                        blank=True,
                                        related_name="watchers")
     
+    def __str__(self):
+        return f"{super().username} | {super().first_name} {super().last_name}"
+    
 class Category(models.Model):
     title = models.CharField(max_length=64)
+
+    def __str__(self):
+        return f"{self.title}"
 
 class Listing(models.Model):
     active = models.BooleanField(default=True)
@@ -22,6 +28,9 @@ class Listing(models.Model):
     category = models.ForeignKey(Category,
                                  blank=True,
                                  on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"{"ACTIVE" if self.active  else "INACTIVE"} | {self.title} ({self.author})"
 
 class Bid(models.Model):
     user = models.ForeignKey(User,
@@ -32,6 +41,9 @@ class Bid(models.Model):
     ammount = models.FloatField()
     created_at = models.DateTimeField()
 
+    def __str__(self):
+        return f"{self.listing} -> {self.ammount} ({self.user})"
+
 class Comment(models.Model):
     author = models.ForeignKey(User,
                                on_delete=models.CASCADE)
@@ -41,5 +53,5 @@ class Comment(models.Model):
     body = models.TextField(max_length=300)
     created_at = models.DateTimeField()
 
-
-
+    def __str__(self):
+        return f"{self.listing} - {self.author} ({self.created_at})"
