@@ -42,7 +42,7 @@ class Bid(models.Model):
     created_at = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.listing} -> {self.ammount} ({self.user})"
+        return f"{self.listing} -> ${self.ammount} ({self.user})"
 
 class Comment(models.Model):
     author = models.ForeignKey(User,
