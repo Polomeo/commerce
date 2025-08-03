@@ -11,14 +11,15 @@
         <li><strong>Price: </strong>$ TO DO</li>
         <li>Created {{ listing.created_at }}</li>
     </ul>
+    <h3>Bids</h3>
+        {% for bid in listing.bids.all %}
+        {{ bid }}<br>
+        {% endfor %}
     <hr>
     {% endif %}
     {% empty %}
     <h4>There are no listings to show.</h4>
     {% endfor %}
 
-    <h3>Bids</h3>
-    {% for bid in current_bids %}
-    {{ bid }}<br>
-    {% endfor %}
+    
 {% endblock %}
