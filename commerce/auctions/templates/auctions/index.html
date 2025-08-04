@@ -11,12 +11,6 @@
         <li><strong>Price: </strong>$ {{ listing.max_bid }}</li>
         <li>Created {{ listing.created_at }}</li>
     </ul>
-    <!-- <h3>Bids</h3>
-        {% for bid in listing.bids.all %}
-            {% if bid.ammount == 50 %}
-                {{ bid }}<br>
-            {% endif %}
-        {% endfor %} -->
     <hr>
     {% endif %}
     {% empty %}
