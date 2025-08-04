@@ -8,15 +8,15 @@
     <h4>{{ listing.title }}</h4>
     <img src="{{ listing.img_url }}" alt="{{ tittle }}" width="120px">
     <ul>
-        <li><strong>Price: </strong>$ TO DO</li>
+        <li><strong>Price: </strong>$ {{ listing.max_bid }}</li>
         <li>Created {{ listing.created_at }}</li>
     </ul>
-    <h3>Bids</h3>
+    <!-- <h3>Bids</h3>
         {% for bid in listing.bids.all %}
             {% if bid.ammount == 50 %}
                 {{ bid }}<br>
             {% endif %}
-        {% endfor %}
+        {% endfor %} -->
     <hr>
     {% endif %}
     {% empty %}
