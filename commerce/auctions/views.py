@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models import Max 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -9,7 +10,7 @@ from .models import User, Listing, Bid
 
 def index(request):
     listings = Listing.objects.all().order_by('-created_at')
-    current_bids = Bid.objects.all()
+    current_bids = Bid.objects.all() # USAR MAX PARA SACAR EL BID MAS ALTO
     return render(request, "auctions/index.html", {
         "listings" : listings,
         "current_bids" : current_bids
