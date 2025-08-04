@@ -9,8 +9,6 @@ from .models import User, Listing, Bid
 
 
 def index(request):
-    # listings = Listing.objects.all().order_by('-created_at')
-    # current_bids = Bid.objects.all() # USAR MAX PARA SACAR EL BID MAS ALTO
     listings = Listing.objects.annotate(max_bid=Max("bids__ammount")).order_by('-created_at')
     return render(request, "auctions/index.html", {
         "listings" : listings
