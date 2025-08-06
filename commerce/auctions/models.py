@@ -30,7 +30,7 @@ class Listing(models.Model):
                                  on_delete=models.CASCADE)
     
     def __str__(self):
-        return f"{"ACTIVE" if self.active else "INACTIVE"} | {self.title} ({self.author})"
+        return f"{'ACTIVE' if self.active else 'INACTIVE'} | {self.title} ({self.author})"
 
 class Bid(models.Model):
     user = models.ForeignKey(User,
