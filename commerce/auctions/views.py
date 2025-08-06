@@ -1,18 +1,36 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.db.models import Max 
+from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing, Bid
+from .models import User, Listing, Category
+from .forms import CreateListingForm
 
 
 def index(request):
-    listings = Listing.objects.annotate(max_bid=Max("bids__ammount")).order_by('-created_at')
+    listings = Listing.objects.annotate(
+        max_bid=Max("bids__ammount")).order_by('-created_at')
     return render(request, "auctions/index.html", {
-        "listings" : listings
+        "listings": listings
     })
+
+# LISTINGS
+
+
+@login_required(login_url="login")
+def create_listing(request):
+    if request.method == "POST":
+        pass
+
+    form = CreateListingForm()
+    return render(request, "auctions/create.html", {
+        "form": form,
+    })
+
+# LOGIN
 
 
 def login_view(request):
