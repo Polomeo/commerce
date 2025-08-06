@@ -10,7 +10,8 @@ class CreateListingForm(forms.Form):
     description = forms.CharField(max_length=300,
                                   widget=forms.Textarea,
                                   required=True)
-    base_bid = forms.FloatField(min_value=1,
+    base_bid = forms.FloatField(min_value=1.0,
                                 required=True)
     img_url = forms.URLField(empty_value='')
-    category = forms.ModelChoiceField(queryset=categories)
+    category = forms.ModelChoiceField(queryset=categories,
+                                      required=True)
