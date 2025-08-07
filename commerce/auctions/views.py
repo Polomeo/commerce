@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -6,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing, Category
+from .models import User, Listing, Bid
 from .forms import CreateListingForm
 
 
@@ -23,7 +25,37 @@ def index(request):
 @login_required(login_url="login")
 def create_listing(request):
     if request.method == "POST":
-        pass
+        form = CreateListingForm(request.POST)
+        if form.is_valid():
+            # Get the current time
+            now = datetime.now()
+            # Save Listing object
+            new_listing = Listing(
+                active=True,
+                author=request.user,
+                created_at=now,
+                title=form.cleaned_data["title"],
+                description=form.cleaned_data["description"],
+                img_url=form.cleaned_data["img_url"],
+                category=form.cleaned_data["category"],
+            )
+            new_listing.save()
+            # Save Bid object
+            initial_bid = Bid(
+                user=request.user,
+                listing=new_listing,
+                ammount=form.cleaned_data["base_bid"],
+                created_at=now
+            )
+            initial_bid.save()
+            # Redirect to listing page - TODO
+            return HttpResponseRedirect(reverse("index"))
+        # Else error message
+        else:
+            return render(request, "auctions/create.html", {
+                "message": "Please check all required fields.",
+                "form": form,
+            })
 
     form = CreateListingForm()
     return render(request, "auctions/create.html", {
