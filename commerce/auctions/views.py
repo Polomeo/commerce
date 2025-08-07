@@ -62,6 +62,15 @@ def create_listing(request):
         "form": form,
     })
 
+
+def listing_view(request, pk):
+    listing = Listing.objects.get(pk=pk)
+    bids = Bid.objects.all().filter(listing=pk).order_by('-ammount')
+    return render(request, "auctions/listing.html", {
+        "listing": listing,
+        "bids": bids,
+    })
+
 # LOGIN
 
 

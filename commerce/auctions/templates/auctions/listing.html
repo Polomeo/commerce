@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+{% block title %}{{ listing.title }}{% endblock %}
+
+{% block body %}
+<h1>{{ listing.title }}</h1>
+{% if listing.img_url is not "" %}
+<img src="{{ listing.img_url }}" alt="{{ listing.title }}" width="200px">
+{% else %}
+<h5>No image available.</h5>
+{% endif %}
+<h3>Current price: {{ listing.bids }}</h3>
+
+{% endblock %}
