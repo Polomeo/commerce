@@ -49,7 +49,7 @@ def create_listing(request):
             )
             initial_bid.save()
             # Redirect to listing page - TODO
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("listing", kwargs={"pk": new_listing.id}))
         # Else error message
         else:
             return render(request, "auctions/create.html", {
