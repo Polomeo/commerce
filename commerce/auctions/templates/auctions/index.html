@@ -1,21 +1,21 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+<h2>Active Listings</h2>
 
-    {% for listing in listings %}
-    {% if listing.active %}
-    <h4>{{ listing.title }}</h4>
-    <img src="{{ listing.img_url }}" alt="{{ tittle }}" width="120px">
-    <ul>
-        <li><strong>Price: </strong>$ {{ listing.max_bid }}</li>
-        <li>Created {{ listing.created_at }}</li>
-    </ul>
-    <hr>
-    {% endif %}
-    {% empty %}
-    <h4>There are no listings to show.</h4>
-    {% endfor %}
+{% for listing in listings %}
+{% if listing.active %}
+<h4>{{ listing.title }}</h4>
+<img src="{{ listing.img_url }}" alt="{{ tittle }}" width="120px">
+<ul>
+    <li><strong>Price: </strong>$ {{ listing.max_bid|floatformat:2 }}</li>
+    <li>Created {{ listing.created_at }}</li>
+</ul>
+<hr>
+{% endif %}
+{% empty %}
+<h4>There are no listings to show.</h4>
+{% endfor %}
 
-    
+
 {% endblock %}
