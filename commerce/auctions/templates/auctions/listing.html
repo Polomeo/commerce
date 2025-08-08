@@ -8,9 +8,24 @@
 {% else %}
 <h5>No image available.</h5>
 {% endif %}
-<h3>Current price: ${{ current_bid.ammount|floatformat:2 }}</h3>
-<h5>{{ total_bids }} bid(s) placed.</h5>
-<div>
+<div class="price-container">
+    <h3>Current price: ${{ current_bid.ammount|floatformat:2 }}</h3>
+    <h5>{{ total_bids }} bid(s) placed.</h5>
+    {% if request.user == listing.author %}
+    <form action="{% url 'listing' listing.id %}" method="POST">
+        <input class="btn btn-danger" type="submit" value="Close listing">
+    </form>
+    {% else %}
+    <form action="{% url 'listing' listing.id %}" method="POST">
+        <input type="number" min="{{ current_bid.ammount }}">
+        <!-- if current bid == this user -->
+        <input class="btn btn-success" type="submit" value="Place bid">
+        <!-- if not in watchlist -->
+        <input class="btn btn-secondary" type="submit" value="Add to watchlist">
+    </form>
+    {% endif %}
+</div>
+<div class="listing-description">
     {{ listing.description }}
 </div>
 {% endblock %}
