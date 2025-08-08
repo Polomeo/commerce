@@ -9,5 +9,8 @@
 <h5>No image available.</h5>
 {% endif %}
 <h3>Current price: ${{ current_bid.ammount|floatformat:2 }}</h3>
-
+<h5>{{ total_bids }} bid(s) placed.</h5>
+<div>
+    {{ listing.description }}
+</div>
 {% endblock %}

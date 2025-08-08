@@ -67,9 +67,12 @@ def listing_view(request, pk):
     listing = Listing.objects.get(pk=pk)
     current_bid = Bid.objects.filter(
         listing=listing).order_by('-ammount').first()
+    total_bids = len(Bid.objects.filter(
+        listing=listing))
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "current_bid": current_bid,
+        "total_bids": total_bids,
     })
 
 # LOGIN
