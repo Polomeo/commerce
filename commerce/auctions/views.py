@@ -69,10 +69,13 @@ def listing_view(request, pk):
         listing=listing).order_by('-ammount').first()
     total_bids = len(Bid.objects.filter(
         listing=listing))
+    has_user_bid = True if Bid.objects.filter(
+        listing=listing).filter(user=request.user).exists() else False
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "current_bid": current_bid,
         "total_bids": total_bids,
+        "has_user_bid": has_user_bid,
     })
 
 # LOGIN

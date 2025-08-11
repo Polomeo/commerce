@@ -19,8 +19,13 @@
     <form action="{% url 'listing' listing.id %}" method="POST">
         <input type="number" min="{{ current_bid.ammount }}">
         <!-- if current bid == this user -->
+        {% if has_user_bid %}
+        <span style="color:green">BIDDEASTE</span>
+        {% else %}
+        <span style="color:red">NO BIDDEASTE</span>
+        {% endif %}
         <input class="btn btn-success" type="submit" value="Place bid">
-        <!-- if not in watchlist -->
+        <!-- if not in watchlist THIS TO ANOTHER FORM -->
         <input class="btn btn-secondary" type="submit" value="Add to watchlist">
     </form>
     {% endif %}
