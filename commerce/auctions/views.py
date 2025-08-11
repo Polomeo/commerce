@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import User, Listing, Bid
@@ -69,8 +69,21 @@ def listing_view(request, pk):
         listing=listing).order_by('-ammount').first()
     total_bids = len(Bid.objects.filter(
         listing=listing))
-    has_user_bid = True if Bid.objects.filter(
-        listing=listing).filter(user=request.user).exists() else False
+    if request.user.is_authenticated:
+        has_user_bid = True if Bid.objects.filter(
+            listing=listing).filter(user=request.user).exists() else False
+    else:
+        has_user_bid = False
+
+    if request.method == "POST":
+        # Check if the user is authenticated -> Mandarlo al login con next (esta publi)
+        if not request.user.is_authenticated:
+            return reverse('login', next=redirect(f'listing/{pk}'))
+        # Check if the bid is higher than the current
+        # Create a bid with the new ammount
+        # Redirect to listing page
+        pass
+
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "current_bid": current_bid,

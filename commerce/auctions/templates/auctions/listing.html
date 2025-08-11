@@ -2,6 +2,9 @@
 {% block title %}{{ listing.title }}{% endblock %}
 
 {% block body %}
+<!-- if not in watchlist -> URL to add_watchlist TODO  -->
+<!-- <a href="add watchlist" class="btn btn-secondary" type="button">Add to watchlist</a> -->
+<!-- watchlist -->
 <h1>{{ listing.title }}</h1>
 {% if listing.img_url is not "" %}
 <img src="{{ listing.img_url }}" alt="{{ listing.title }}" width="200px">
@@ -17,16 +20,17 @@
     </form>
     {% else %}
     <form action="{% url 'listing' listing.id %}" method="POST">
+        {% csrf_token %}
         <input type="number" min="{{ current_bid.ammount }}">
         <!-- if current bid == this user -->
         {% if has_user_bid %}
-        <span style="color:green">BIDDEASTE</span>
+        {% if current_bid.user == request.user %}
+        <span style="color:green">You are the current bid!</span>
         {% else %}
-        <span style="color:red">NO BIDDEASTE</span>
+        <span style="color:red">Your bid is behind the current!</span>
+        {% endif %}
         {% endif %}
         <input class="btn btn-success" type="submit" value="Place bid">
-        <!-- if not in watchlist THIS TO ANOTHER FORM -->
-        <input class="btn btn-secondary" type="submit" value="Add to watchlist">
     </form>
     {% endif %}
 </div>
