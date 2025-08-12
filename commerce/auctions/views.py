@@ -78,12 +78,31 @@ def listing_view(request, pk):
     if request.method == "POST":
         # Check if the user is authenticated -> Mandarlo al login con next (esta publi)
         if not request.user.is_authenticated:
-            return reverse('login', next=redirect(f'listing/{pk}'))
+            return redirect(reverse('login'))
         # Check if the bid is higher than the current
+        bid_ammount = request.POST["bid_ammount"]
+        if float(bid_ammount) <= current_bid.ammount:
+            return render(request, "auctions/listing.html", {
+                "listing": listing,
+                "current_bid": current_bid,
+                "total_bids": total_bids,
+                "has_user_bid": has_user_bid,
+                "message": "The bid has to be higher than the current bid."
+            })
         # Create a bid with the new ammount
+        else:
+            now = datetime.now()
+            new_bid = Bid(
+                user=request.user,
+                listing=listing,
+                ammount=float(bid_ammount),
+                created_at=now
+            )
+            new_bid.save()
         # Redirect to listing page
-        pass
+            return HttpResponseRedirect(reverse('listing', kwargs={"pk": pk}))
 
+    # GET
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "current_bid": current_bid,
