@@ -87,7 +87,7 @@ def listing_view(request, pk):
                 "current_bid": current_bid,
                 "total_bids": total_bids,
                 "has_user_bid": has_user_bid,
-                "message": "The bid has to be higher than the current bid."
+                "message": "Your bid has to be higher than the current bid."
             })
         # Create a bid with the new ammount
         else:

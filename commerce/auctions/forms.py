@@ -12,6 +12,7 @@ class CreateListingForm(forms.Form):
                                   required=True)
     base_bid = forms.FloatField(min_value=1.0,
                                 required=True)
-    img_url = forms.URLField(empty_value='')
+    img_url = forms.URLField(required=False,
+                             empty_value='https://st4.depositphotos.com/14953852/24787/v/450/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg')
     category = forms.ModelChoiceField(queryset=categories,
                                       required=True)
