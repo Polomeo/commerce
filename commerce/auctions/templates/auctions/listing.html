@@ -18,7 +18,7 @@
     <h3>Current price: ${{ current_bid.ammount|floatformat:2 }}</h3>
     <h5>{{ total_bids }} bid(s) placed.</h5>
     {% if request.user == listing.author %}
-    <a href="close listing" class="btn btn-danger" type="button">Close listing</a>
+    <a href="{% url 'close' listing.id %}" class="btn btn-danger" type="button">Close listing</a>
     {% else %}
     {% if has_user_bid %}
     {% if current_bid.user == request.user %}

@@ -1,0 +1,19 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}Close listing{% endblock %}
+
+{% block body %}
+{% if not listing.author == request.user %}
+<h1>You shall not pass!</h1>
+<a href="{% url 'listing' listing.id %}" class="btn btn-secondary">Go back</a>
+{% else %}
+<h1>Close listing</h1>
+<p>Are you sure you want to close the listing?</p>
+<h4>{{ listing.title }}</h4>
+<form action="{% url 'close' listing.id %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" class="btn btn-danger" value="Close">
+</form>
+<a href="{% url 'listing' listing.id %}" class="btn btn-secondary">Cancel</a>
+{% endif %}
+{% endblock %}

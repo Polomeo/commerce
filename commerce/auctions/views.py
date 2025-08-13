@@ -110,6 +110,16 @@ def listing_view(request, pk):
         "has_user_bid": has_user_bid,
     })
 
+
+def close_listing(request, pk):
+    listing = Listing.objects.get(pk=pk)
+    if request.method == "POST" and request.user == listing.author:
+        listing.active = False
+        listing.save()
+        return HttpResponseRedirect(reverse('listing', kwargs={"pk": pk}))
+    return render(request, 'auctions/close.html', {
+        "listing": listing
+    })
 # LOGIN
 
 
