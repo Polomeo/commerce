@@ -23,7 +23,11 @@
     {% else %}
     {% if has_user_bid %}
     {% if current_bid.user == request.user %}
+    {% if listing.active %}
     <span style="color:green">You are the current bid!</span>
+    {% else %}
+    <span style="color:green">You are the winner of this bid!</span>
+    {% endif %}
     {% else %}
     <span style="color:red">Your bid is behind the current!</span>
     {% endif %}
