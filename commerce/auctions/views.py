@@ -114,8 +114,12 @@ def listing_view(request, pk):
 def my_listings(request):
     listings = Listing.objects.annotate(
         max_bid=Max("bids__ammount")).order_by('-created_at').filter(author=request.user)
+    won_listings = Listing.objects.annotate(
+        max_bid=Max("bids__ammount")).exclude(author=request.user).filter(active=False)
+    
     return render(request, "auctions/mylistings.html", {
-        "listings": listings
+        "listings": listings,
+        "won_listings" : won_listings
     })
 
 @login_required(login_url="login")

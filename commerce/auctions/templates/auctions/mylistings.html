@@ -2,6 +2,21 @@
 {% block title %}My listings{% endblock %}
 {% block body %}
 <h2>My listings</h2>
+<!-- Won listings -->
+{% if not won_listings is None %}
+<div class="alert alert-success" role="alert">
+    Won listings
+</div>
+{% for listing in won_listings %}
+<h4><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h4>
+<img src="{{ listing.img_url }}" alt="{{ title }}" width="120px">
+<ul>
+    <li><strong>Won Price: </strong>$ {{ listing.max_bid|floatformat:2 }}</li>
+    <li>Created {{ listing.created_at }} by {{ listing.author.username }}</li>
+</ul>
+<hr>
+{% endfor %}
+{% endif %}
 <!-- Active listings -->
 <div class="alert alert-primary" role="alert">
     Active listings
