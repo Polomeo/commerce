@@ -110,6 +110,7 @@ def listing_view(request, pk):
         "has_user_bid": has_user_bid,
     })
 
+@login_required(login_url="login")
 def my_listings(request):
     listings = Listing.objects.annotate(
         max_bid=Max("bids__ammount")).order_by('-created_at').filter(author=request.user)
@@ -117,6 +118,7 @@ def my_listings(request):
         "listings": listings
     })
 
+@login_required(login_url="login")
 def close_listing(request, pk):
     listing = Listing.objects.get(pk=pk)
     if request.method == "POST" and request.user == listing.author:
