@@ -2,13 +2,16 @@
 {% block title %}My listings{% endblock %}
 {% block body %}
 <h2>My listings</h2>
-
+<!-- Active listings -->
+<div class="alert alert-primary" role="alert">
+    Active listings
+</div>
 {% for listing in listings %}
 {% if listing.active %}
 <h4><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h4>
 <img src="{{ listing.img_url }}" alt="{{ title }}" width="120px">
 <ul>
-    <li><strong>Price: </strong>$ {{ listing.max_bid|floatformat:2 }}</li>
+    <li><strong>Current Price: </strong>$ {{ listing.max_bid|floatformat:2 }}</li>
     <li>Created {{ listing.created_at }}</li>
 </ul>
 <hr>
@@ -16,4 +19,22 @@
 {% empty %}
 <h4>There are no listings to show.</h4>
 {% endfor %}
+<!-- Inactive / finished listings -->
+<div class="alert alert-secondary" role="alert">
+    Finished listings
+</div>
+{% for listing in listings %}
+{% if not listing.active %}
+<h4><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h4>
+<img src="{{ listing.img_url }}" alt="{{ title }}" width="120px">
+<ul>
+    <li><strong>Finish Price: </strong>$ {{ listing.max_bid|floatformat:2 }}</li>
+    <li>Created {{ listing.created_at }}</li>
+</ul>
+<hr>
+{% endif %}
+{% empty %}
+<h4>There are no listings to show.</h4>
+{% endfor %}
+
 {% endblock %}

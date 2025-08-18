@@ -8,6 +8,7 @@
 {% if message %}
 <span style="color:red">{{ message }}</span>
 {% endif %}
+<!-- Closed listing alert -->
 {% if not listing.active %}
 <div class="alert alert-warning" role="alert">
     This listing is closed. You can explore the active listings <a href="{% url 'index' %}">here.</a>
@@ -18,26 +19,47 @@
 <div class="price-container">
     <h3>Current price: ${{ current_bid.ammount|floatformat:2 }}</h3>
     <h5>{{ total_bids }} bid(s) placed.</h5>
-    {% if request.user == listing.author and listing.active %}
-    <a href="{% url 'close' listing.id %}" class="btn btn-danger" type="button">Close listing</a>
-    {% else %}
-    {% if has_user_bid %}
-    {% if current_bid.user == request.user %}
+    <!-- This part checks if the listing is active, and if the user is the author or the highest bidder -->
+    <!-- The listing is active -->
     {% if listing.active %}
-    <span style="color:green">You are the current bid!</span>
+        <!-- User is author -->
+        {% if request.user == listing.author%}
+            <a href="{% url 'close' listing.id %}" class="btn btn-danger" type="button">Close listing</a>
+            {% if current_bid.user == listing.author %}
+                <span style="color:red">No bids.</span>
+            {% else %}
+                <span style="color:green">The current bid is from {{ current_bid.user.username }}</span>
+            {% endif %}
+        <!-- User is not the author -->
+        {% else %} 
+            {% if current_bid.user == request.user %}
+                <span style="color:green">You are the current bid!</span>
+            {% else %}
+                <span style="color:red">Your bid is behind the current!</span>
+            {% endif %}
+        <form action="{% url 'listing' listing.id %}" method="POST">
+            {% csrf_token %}
+            <input name="bid_ammount" type="number" min="{{ current_bid.ammount }}">
+            <input class="btn btn-success" type="submit" value="Place bid">
+        </form>
+        {% endif %}
+    <!-- Listing is closed-->
     {% else %}
-    <span style="color:green">You are the winner of this bid!</span>
-    {% endif %}
-    {% else %}
-    <span style="color:red">Your bid is behind the current!</span>
-    {% endif %}
-    {% endif %}
-    <form action="{% url 'listing' listing.id %}" method="POST">
-        {% csrf_token %}
-        <input name="bid_ammount" type="number" min="{{ current_bid.ammount }}">
-        <input class="btn btn-success" type="submit" value="Place bid">
-    </form>
-    {% endif %}
+    <!-- User is author -->
+        {% if request.user == listing.author%}
+                {% if current_bid.user == request.user %}
+                    <span style="color:red">There were no bids for this listing.</span>
+                {% else %}
+                    <span style="color:green">The user {{ current_bid.user.username }} has won this listing!</span>
+                {% endif %}
+        <!-- User is not the author -->
+        {% else %}
+            {% if current_bid.user == request.user %}
+                <span style="color:green">You are the winner of this listing!</span>
+            {% endif %}
+        {% endif %}
+    {% endif %} <!--/Listing is active-->
+
 </div>
 <div class="listing-description">
     {{ listing.description }}
