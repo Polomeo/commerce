@@ -110,6 +110,12 @@ def listing_view(request, pk):
         "has_user_bid": has_user_bid,
     })
 
+def my_listings(request):
+    listings = Listing.objects.annotate(
+        max_bid=Max("bids__ammount")).order_by('-created_at').filter(author=request.user)
+    return render(request, "auctions/mylistings.html", {
+        "listings": listings
+    })
 
 def close_listing(request, pk):
     listing = Listing.objects.get(pk=pk)

@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
-
+{% block title %}My listings{% endblock %}
 {% block body %}
-<h2>Active Listings</h2>
+<h2>My listings</h2>
 
 {% for listing in listings %}
 {% if listing.active %}
