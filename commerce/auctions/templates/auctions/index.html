@@ -9,6 +9,7 @@
 <img src="{{ listing.img_url }}" alt="{{ title }}" width="120px">
 <ul>
     <li><strong>Price: </strong>$ {{ listing.max_bid|floatformat:2 }}</li>
+    <li>Listed by: {{ listing.author.username }}</li>
     <li>Created {{ listing.created_at }}</li>
 </ul>
 <hr>
