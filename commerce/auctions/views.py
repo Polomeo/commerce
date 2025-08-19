@@ -3,7 +3,7 @@ from datetime import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.db.models import Max
+from django.db.models import Max, OuterRef, Subquery
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -114,12 +114,12 @@ def listing_view(request, pk):
 def my_listings(request):
     listings = Listing.objects.annotate(
         max_bid=Max("bids__ammount")).order_by('-created_at').filter(author=request.user)
-    won_listings = Listing.objects.annotate(
-        max_bid=Max("bids__ammount")).exclude(author=request.user).filter(active=False)
-    
+    won_listings = [] # TO DO
+
+    print(f"DEBUG: Won listings: {won_listings}")
     return render(request, "auctions/mylistings.html", {
         "listings": listings,
-        "won_listings" : won_listings
+        "won_listings" : won_listings,
     })
 
 @login_required(login_url="login")
