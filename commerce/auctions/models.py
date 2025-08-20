@@ -1,11 +1,10 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# Used lazy relationship to avoid not-defined error
-# due to class declaration position
-
 
 class User(AbstractUser):
+    # Used lazy relationship to avoid not-defined error
+    # due to class declaration position
     watchlist = models.ManyToManyField('Listing',
                                        blank=True,
                                        related_name="watchers")

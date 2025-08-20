@@ -110,17 +110,19 @@ def listing_view(request, pk):
         "has_user_bid": has_user_bid,
     })
 
+
 @login_required(login_url="login")
 def my_listings(request):
     listings = Listing.objects.annotate(
         max_bid=Max("bids__ammount")).order_by('-created_at').filter(author=request.user)
-    won_listings = [] # TO DO
+    won_listings = []  # TODO
 
     print(f"DEBUG: Won listings: {won_listings}")
     return render(request, "auctions/mylistings.html", {
         "listings": listings,
-        "won_listings" : won_listings,
+        "won_listings": won_listings,
     })
+
 
 @login_required(login_url="login")
 def close_listing(request, pk):
@@ -132,6 +134,21 @@ def close_listing(request, pk):
     return render(request, 'auctions/close.html', {
         "listing": listing
     })
+
+# WATCHLIST
+
+
+def watchlist_item(request, listing_id):
+    listing = Listing.objects.get(pk=listing_id)
+    if request.user in listing.watchers.all():
+        request.user.watchlist.remove(listing)
+    else:
+        request.user.watchlist.add(listing)
+    print(f"Watchlist: {request.user.watchlist}")
+
+    return HttpResponseRedirect(reverse('listing', args=(listing_id, )))
+
+
 # LOGIN
 
 
