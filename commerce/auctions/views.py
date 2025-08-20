@@ -149,6 +149,14 @@ def watchlist_item(request, listing_id):
     return HttpResponseRedirect(reverse('listing', args=(listing_id, )))
 
 
+def watchlist(request):
+    watched_listings = request.user.watchlist.all()
+    print(f"DEBUG: {watched_listings}")
+    return render(request, 'auctions/watchlist.html', {
+        'watched_listings': watched_listings
+    })
+
+
 # LOGIN
 
 

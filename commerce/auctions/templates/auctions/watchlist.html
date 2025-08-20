@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+{% block title %}Watchlist{% endblock %}
+{% block body %}
+<h2>Watchlist</h2>
+
+{% for listing in watched_listings %}
+{% if listing.active %}
+<h4><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h4>
+<img src="{{ listing.img_url }}" alt="{{ title }}" width="120px">
+<ul>
+    <!-- <li><strong>Price: </strong>$ {{ listing.max_bid|floatformat:2 }}</li> -->
+    <li>Listed by: {{ listing.author.username }}</li>
+    <li>Created {{ listing.created_at }}</li>
+</ul>
+<a href="{% url 'set-watchlist' listing.id %}" class="btn btn-danger">Remove</a>
+<hr>
+{% endif %}
+{% empty %}
+<h4>You are not watching any listings yet!</h4>
+{% endfor %}
+{% endblock %}
