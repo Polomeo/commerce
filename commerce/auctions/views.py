@@ -147,7 +147,8 @@ def my_listings(request):
     listings = Listing.objects.annotate(
         max_bid=Max("bids__ammount")).order_by('-created_at').filter(author=request.user)
     won_listings = []  # TODO
-    for closed_listing in Listing.objects.filter(active=False).exclude(author=request.user):
+    for closed_listing in Listing.objects.annotate(
+            max_bid=Max("bids__ammount")).order_by('-created_at').filter(active=False).exclude(author=request.user):
         highest_bid = Bid.objects.filter(
             listing=closed_listing).order_by('-ammount').first()
         if highest_bid.user == request.user:
