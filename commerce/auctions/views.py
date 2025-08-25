@@ -70,6 +70,7 @@ def listing_view(request, pk):
         listing=listing).order_by('-ammount').first()
     total_bids = len(Bid.objects.filter(
         listing=listing))
+    in_watchlist = True if request.user in listing.watchers.all() else False
     if request.user.is_authenticated:
         has_user_bid = True if Bid.objects.filter(
             listing=listing).filter(user=request.user).exists() else False
@@ -90,6 +91,8 @@ def listing_view(request, pk):
                     "current_bid": current_bid,
                     "total_bids": total_bids,
                     "has_user_bid": has_user_bid,
+                    "in_watchlist": in_watchlist,
+                    "comments": comments,
                     "message": "Your bid has to be higher than the current bid."
                 })
             # Create a bid with the new ammount
@@ -122,6 +125,7 @@ def listing_view(request, pk):
         "current_bid": current_bid,
         "total_bids": total_bids,
         "has_user_bid": has_user_bid,
+        "in_watchlist": in_watchlist,
         "comments": comments,
     })
 
