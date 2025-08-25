@@ -65,7 +65,7 @@ def create_listing(request):
 
 def listing_view(request, pk):
     listing = Listing.objects.get(pk=pk)
-    comments = Comment.objects.filter(listing=listing)
+    comments = Comment.objects.filter(listing=listing).order_by('-created_at')
     current_bid = Bid.objects.filter(
         listing=listing).order_by('-ammount').first()
     total_bids = len(Bid.objects.filter(
@@ -77,30 +77,43 @@ def listing_view(request, pk):
         has_user_bid = False
 
     if request.method == "POST":
-        # Check if the user is authenticated -> Mandarlo al login con next (esta publi)
+        # Check if the user is authenticated
         if not request.user.is_authenticated:
             return redirect(reverse('login'))
-        # Check if the bid is higher than the current
-        bid_ammount = request.POST["bid_ammount"]
-        if float(bid_ammount) <= current_bid.ammount:
-            return render(request, "auctions/listing.html", {
-                "listing": listing,
-                "current_bid": current_bid,
-                "total_bids": total_bids,
-                "has_user_bid": has_user_bid,
-                "message": "Your bid has to be higher than the current bid."
-            })
-        # Create a bid with the new ammount
-        else:
-            now = datetime.now()
-            new_bid = Bid(
-                user=request.user,
+        # Bid
+        if 'add_bid' in request.POST:
+            # Check if the bid is higher than the current
+            bid_ammount = request.POST["bid_ammount"]
+            if float(bid_ammount) <= current_bid.ammount:
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "current_bid": current_bid,
+                    "total_bids": total_bids,
+                    "has_user_bid": has_user_bid,
+                    "message": "Your bid has to be higher than the current bid."
+                })
+            # Create a bid with the new ammount
+            else:
+                now = datetime.now()
+                new_bid = Bid(
+                    user=request.user,
+                    listing=listing,
+                    ammount=float(bid_ammount),
+                    created_at=now
+                )
+                new_bid.save()
+            # Redirect to listing page
+                return HttpResponseRedirect(reverse('listing', kwargs={"pk": pk}))
+        # Comment
+        elif 'send_comment' in request.POST:
+            comment_body = request.POST["comment_body"]
+            new_comment = Comment(
+                author=request.user,
                 listing=listing,
-                ammount=float(bid_ammount),
-                created_at=now
+                body=comment_body,
+                created_at=datetime.now()
             )
-            new_bid.save()
-        # Redirect to listing page
+            new_comment.save()
             return HttpResponseRedirect(reverse('listing', kwargs={"pk": pk}))
 
     # GET
