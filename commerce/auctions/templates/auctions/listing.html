@@ -70,14 +70,14 @@
 <form action="{% url 'listing' listing.id %}" method="POST">
     {% csrf_token %}
     <input name="comment_body" type="textarea" placeholder="Comment...">
-    <input type="submit" name="send_comment" class="button btn-secondary" value="Send">
+    <input type="submit" name="send_comment" class="btn btn-info" value="Send">
 </form>
 {% endif %}
 <div class="comment-container">
     {% for comment in comments %}
     <p>
-        {% if request.user == listing.author %}
-        <span class="badge rounded-pill text-bg-info">Author</span>
+        {% if listing.author == comment.author %}
+        <span class="badge">Author</span>
         {% endif %}
         <strong>{{ comment.author.username }} </strong><em>at {{ comment.created_at }}</em>
     </p>
