@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import User, Listing, Bid
+from .models import User, Listing, Bid, Comment
 from .forms import CreateListingForm
 
 
@@ -65,6 +65,7 @@ def create_listing(request):
 
 def listing_view(request, pk):
     listing = Listing.objects.get(pk=pk)
+    comments = Comment.objects.filter(listing=listing)
     current_bid = Bid.objects.filter(
         listing=listing).order_by('-ammount').first()
     total_bids = len(Bid.objects.filter(
@@ -108,6 +109,7 @@ def listing_view(request, pk):
         "current_bid": current_bid,
         "total_bids": total_bids,
         "has_user_bid": has_user_bid,
+        "comments": comments,
     })
 
 
