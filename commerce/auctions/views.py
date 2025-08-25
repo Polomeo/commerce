@@ -13,8 +13,13 @@ from .forms import CreateListingForm
 
 
 def index(request):
-    listings = Listing.objects.annotate(
-        max_bid=Max("bids__ammount")).order_by('-created_at')
+    cat = request.GET.get('cat')
+    if cat is not None:
+        listings = Listing.objects.annotate(
+            max_bid=Max("bids__ammount")).order_by('-created_at').filter(category=cat)
+    else:
+        listings = Listing.objects.annotate(
+            max_bid=Max("bids__ammount")).order_by('-created_at')
     return render(request, "auctions/index.html", {
         "listings": listings
     })
