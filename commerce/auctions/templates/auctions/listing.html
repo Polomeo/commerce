@@ -14,10 +14,12 @@
     This listing is closed. You can explore the active listings <a href="{% url 'index' %}">here.</a>
 </div>
 {% endif %}
+{% if not listing.author == request.user %}
 {% if in_watchlist %}
 <a href="{% url 'set-watchlist' listing.id %}" class="btn btn-secondary">Remove from Watchlist</a>
 {% else %}
 <a href="{% url 'set-watchlist' listing.id %}" class="btn btn-info">Add to watchlist</a>
+{% endif %}
 {% endif %}
 <h1>{{ listing.title }}</h1>
 <img src="{{ listing.img_url }}" alt="{{ listing.title }}" width="200px">
