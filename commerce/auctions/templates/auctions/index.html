@@ -5,14 +5,24 @@
 
 {% for listing in listings %}
 {% if listing.active %}
-<h4><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h4>
-<img src="{{ listing.img_url }}" alt="{{ title }}" width="120px">
-<ul>
-    <li><strong>Price: </strong>$ {{ listing.max_bid|floatformat:2 }}</li>
-    <li>Listed by: {{ listing.author.username }}</li>
-    <li>Created {{ listing.created_at }}</li>
-</ul>
-<hr>
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+        <a href="{% url 'listing' listing.id %}">
+            <img src="{{ listing.img_url }}" class="img-fluid rounded-start" style="padding: 2px;" alt="{{ listing.title }}" height="100px">
+        </a>
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title"><a href="{% url 'listing' listing.id %}">{{ listing.title }}</a></h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary"><strong>Price: </strong>$ {{ listing.max_bid|floatformat:2 }}</h6>
+        <p class="card-text">{{ listing.description }}</p>
+        <p class="card-text"><small class="text-body-secondary">Listed by {{ listing.author.username }} at {{ listing.created_at }}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endif %}
 {% empty %}
 <h4>There are no listings to show.</h4>
