@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import User, Listing, Bid, Comment
+from .models import User, Listing, Bid, Comment, Category
 from .forms import CreateListingForm
 
 
@@ -127,6 +127,13 @@ def listing_view(request, pk):
         "has_user_bid": has_user_bid,
         "in_watchlist": in_watchlist,
         "comments": comments,
+    })
+
+
+def categories_view(request):
+    categories = Category.objects.all()
+    return render(request, 'auctions/categories.html', {
+        "categories": categories,
     })
 
 
